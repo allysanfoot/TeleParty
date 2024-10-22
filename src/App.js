@@ -1,15 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import CreateRoomPage from './pages/CreateRoomePage';
-import RoomPage from './pages/RoomPage';
+// Import pages
+import Home from './pages/Home';
+import CreateRoom from './pages/CreateRoom';
+import RoomPage from './pages/Room';
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Route for creating a new room */}
-        <Route path="/room/new" element={<CreateRoomPage />} />
+        {/* Route for the home page */}
+        <Route path="/" element={<Home />} />
         {/* Route for joining an existing room by roomId */}
         <Route path="/room/:roomId" element={<RoomPage />} />
       </Routes>

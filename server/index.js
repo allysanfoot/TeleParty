@@ -22,13 +22,37 @@ const io = new Server(server, {
     }
 });
 
+// Set up a Set to store active rooms
+let rooms = new Set();
+
 io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id}`);
 
-    // Join a specific room
+    // Handle room creation
+    socket.on('createRoom', (roomId) => {
+        if (rooms.has(roomId)) {
+            // Notify the user if the room already exists
+            socket.emit('roomExists', roomId);
+            console.log(`Room ${roomId} already exists`);
+        } else {
+            // Add the room to the Set and notify the user
+            rooms.add(roomId);
+            socket.emit('roomCreated', roomId);
+            console.log(`Room ${roomId} created`);
+        }
+    });
+
+    // Handle joining an existing room
     socket.on('joinRoom', (roomId) => {
-        socket.join(roomId);
-        console.log(`User ${socket.id} joined room ${roomId}`);
+        // Check if the room exists before joining
+        if (rooms.has(roomId)) {
+            socket.join(roomId);
+            console.log(`User ${socket.id} joined room ${roomId}`);
+        } else {
+            // Notify the user if the room does not exist
+            socket.emit('roomError', 'Room does not exist');
+            console.log(`User ${socket.id} attempted to join non-existent room ${roomId}`);
+        }
     });
 
     // Handle video synchronization events
