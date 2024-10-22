@@ -47,6 +47,7 @@ io.on('connection', (socket) => {
         // Check if the room exists before joining
         if (rooms.has(roomId)) {
             socket.join(roomId);
+            socket.emit('joinedRoom');
             console.log(`User ${socket.id} joined room ${roomId}`);
         } else {
             // Notify the user if the room does not exist
